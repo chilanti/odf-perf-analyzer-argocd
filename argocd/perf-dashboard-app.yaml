@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/YOUR_ORG/YOUR_REPO.git  # TODO: replace with actual repo URL
+    repoURL: https://github.com/chilanti/odf-perf-analyzer-argocd.git  
     targetRevision: HEAD
     path: automation/odf-perf-next-gen/analyze-argocd/overlays/dev
   destination:
