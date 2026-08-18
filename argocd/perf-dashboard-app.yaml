@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/chilanti/odf-perf-analyzer-argocd.git  
     targetRevision: HEAD
-    path: automation/odf-perf-next-gen/analyze-argocd/overlays/dev
+    path: overlays/dev
   destination:
     server: https://kubernetes.default.svc
     namespace: tenant-odf-perf-analyzer-dev
