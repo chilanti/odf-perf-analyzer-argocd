@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: tenant-odf-perf-analyzer-dev
+
+resources:
+  - ../../base
+  - ../../argocd/opensearch-scc-crb.yaml
+
+patches:
+  # Set the CephFS storage class on the dashboard PVC
+  - target:
+      kind: PersistentVolumeClaim
+      name: perf-results-pvc
+    path: patch-pvc-storage.yaml
+
+  # Set the Ceph RBD storage class on the OpenSearch StatefulSet volumeClaimTemplate
+  - target:
+      kind: StatefulSet
+      name: opensearch
+    path: patch-opensearch-storage.yaml
+
+# Pin the pre-built dashboard image to a specific digest or tag for this environment
+images:
+  - name: quay.io/YOUR_ORG/perf-dashboard
+    newTag: latest  # TODO: replace with a pinned tag, e.g. v1.2.3 or a SHA digest

@@ -1,0 +1,4 @@
+# Patch the storageClassName on the PVC
+- op: replace
+  path: /spec/storageClassName
+  value: ocs-storagecluster-cephfs

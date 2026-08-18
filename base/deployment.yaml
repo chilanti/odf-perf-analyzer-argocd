@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: perf-dashboard
+  labels:
+    app: perf-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: perf-dashboard
+  template:
+    metadata:
+      labels:
+        app: perf-dashboard
+    spec:
+      containers:
+      - name: flask-app
+        # Pre-built image — update this tag when a new image is published
+        image: quay.io/YOUR_ORG/perf-dashboard:latest  # TODO: replace with actual image reference
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        env:
+        - name: PORT
+          value: "8080"
+        - name: HOST
+          value: "0.0.0.0"
+        - name: RESULTS_DIR
+          value: "/app/static/results"
+        volumeMounts:
+        - name: results-data
+          mountPath: /app/static/results
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "1"
+          limits:
+            memory: "4Gi"
+            cpu: "2"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          failureThreshold: 3
+      volumes:
+      - name: results-data
+        persistentVolumeClaim:
+          claimName: perf-results-pvc

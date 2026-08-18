@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tenant-odf-perf-analyzer-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/YOUR_ORG/YOUR_REPO.git  # TODO: replace with actual repo URL
+    targetRevision: HEAD
+    path: automation/odf-perf-next-gen/analyze-argocd/overlays/dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: tenant-odf-perf-analyzer-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

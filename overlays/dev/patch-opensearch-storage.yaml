@@ -1,0 +1,4 @@
+# Patch the storageClassName on the OpenSearch StatefulSet volumeClaimTemplate
+- op: replace
+  path: /spec/volumeClaimTemplates/0/spec/storageClassName
+  value: ocs-storagecluster-ceph-rbd
