@@ -17,7 +17,7 @@ spec:
       containers:
       - name: flask-app
         # Pre-built image — update this tag when a new image is published
-        image: quay.io/YOUR_ORG/perf-dashboard:latest  # TODO: replace with actual image reference
+        image: quay.io/chilanti/perf-dashboard:1.0  
         ports:
         - containerPort: 8080
           name: http
