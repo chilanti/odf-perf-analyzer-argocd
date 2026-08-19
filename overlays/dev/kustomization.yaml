@@ -5,6 +5,7 @@ namespace: tenant-odf-perf-analyzer-dev
 
 resources:
   - ../../base
+  - ../../argocd/opensearch-scc-crb.yaml
 
 patches:
   # Set the CephFS storage class on the dashboard PVC
