@@ -31,20 +31,6 @@ spec:
         app: opensearch
     spec:
       serviceAccountName: opensearch
-      initContainers:
-      - name: fix-permissions
-        image: quay.io/quay/busybox:latest
-        command:
-        - sh
-        - -c
-        - |
-          chown -R 1000:1000 /usr/share/opensearch/data
-          chmod -R 775 /usr/share/opensearch/data
-        volumeMounts:
-        - name: data
-          mountPath: /usr/share/opensearch/data
-        securityContext:
-          runAsUser: 0
       containers:
       - name: opensearch
         image: public.ecr.aws/opensearchproject/opensearch:2.11.1
@@ -71,7 +57,7 @@ spec:
         - name: data
           mountPath: /usr/share/opensearch/data
         securityContext:
-          runAsUser: 1000
+          runAsNonRoot: true
   volumeClaimTemplates:
   - metadata:
       name: data
