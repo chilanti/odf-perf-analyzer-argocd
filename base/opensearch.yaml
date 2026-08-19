@@ -31,20 +31,8 @@ spec:
         app: opensearch
     spec:
       serviceAccountName: opensearch
-      initContainers:
-      - name: fix-permissions
-        image: registry.redhat.io/ubi9/ubi-minimal:latest
-        command:
-        - sh
-        - -c
-        - |
-          chown -R 1000:1000 /usr/share/opensearch/data
-          chmod -R 775 /usr/share/opensearch/data
-        volumeMounts:
-        - name: data
-          mountPath: /usr/share/opensearch/data
-        securityContext:
-          runAsUser: 0
+      securityContext:
+        fsGroup: 1000
       containers:
       - name: opensearch
         image: public.ecr.aws/opensearchproject/opensearch:2.11.1
@@ -72,6 +60,7 @@ spec:
           mountPath: /usr/share/opensearch/data
         securityContext:
           runAsUser: 1000
+          runAsGroup: 1000
   volumeClaimTemplates:
   - metadata:
       name: data
