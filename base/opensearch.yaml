@@ -31,9 +31,20 @@ spec:
         app: opensearch
     spec:
       serviceAccountName: opensearch
-      securityContext:
-        fsGroup: 1000
-        runAsGroup: 1000
+      initContainers:
+      - name: fix-permissions
+        image: registry.redhat.io/ubi9/ubi-minimal:latest
+        command:
+        - sh
+        - -c
+        - |
+          chown -R 1000:1000 /usr/share/opensearch/data
+          chmod -R 775 /usr/share/opensearch/data
+        volumeMounts:
+        - name: data
+          mountPath: /usr/share/opensearch/data
+        securityContext:
+          runAsUser: 0
       containers:
       - name: opensearch
         image: public.ecr.aws/opensearchproject/opensearch:2.11.1
@@ -46,15 +57,9 @@ spec:
         - name: discovery.type
           value: single-node
         - name: OPENSEARCH_JAVA_OPTS
-          value: "-Xms1g -Xmx1g -Dopensearch.bootstrap.system_call_filter=false"
+          value: "-Xms1g -Xmx1g"
         - name: DISABLE_SECURITY_PLUGIN
           value: "true"
-        - name: DISABLE_INSTALL_DEMO_CONFIG
-          value: "true"
-        - name: bootstrap.system_call_filter
-          value: "false"
-        - name: bootstrap.memory_lock
-          value: "false"
         resources:
           requests:
             memory: 2Gi
@@ -66,8 +71,7 @@ spec:
         - name: data
           mountPath: /usr/share/opensearch/data
         securityContext:
-          runAsNonRoot: true
-          runAsGroup: 1000
+          runAsUser: 1000
   volumeClaimTemplates:
   - metadata:
       name: data

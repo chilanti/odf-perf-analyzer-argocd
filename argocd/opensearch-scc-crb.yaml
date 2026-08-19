@@ -4,7 +4,6 @@ metadata:
   name: opensearch-anyuid-tenant-odf-perf-analyzer-dev
   annotations:
     argocd.argoproj.io/sync-wave: "-1"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
