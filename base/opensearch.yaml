@@ -31,6 +31,8 @@ spec:
         app: opensearch
     spec:
       serviceAccountName: opensearch
+      securityContext:
+        fsGroup: 1000
       containers:
       - name: opensearch
         image: public.ecr.aws/opensearchproject/opensearch:2.11.1
