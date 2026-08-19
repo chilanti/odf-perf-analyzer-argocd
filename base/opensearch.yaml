@@ -33,6 +33,7 @@ spec:
       serviceAccountName: opensearch
       securityContext:
         fsGroup: 1000
+        runAsGroup: 1000
       containers:
       - name: opensearch
         image: public.ecr.aws/opensearchproject/opensearch:2.11.1
@@ -48,6 +49,8 @@ spec:
           value: "-Xms1g -Xmx1g"
         - name: DISABLE_SECURITY_PLUGIN
           value: "true"
+        - name: DISABLE_INSTALL_DEMO_CONFIG
+          value: "true"
         resources:
           requests:
             memory: 2Gi
@@ -60,6 +63,7 @@ spec:
           mountPath: /usr/share/opensearch/data
         securityContext:
           runAsNonRoot: true
+          runAsGroup: 1000
   volumeClaimTemplates:
   - metadata:
       name: data
